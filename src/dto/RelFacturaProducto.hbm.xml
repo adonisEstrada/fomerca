@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 03/08/2018 12:14:52 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="dto.RelFacturaProducto" optimistic-lock="version" schema="public" table="rel_factura_producto">
+        <id name="relFacturaProductoId" type="int">
+            <column name="rel_factura_producto_id"/>
+            <generator class="increment"/>
+        </id>
+        <many-to-one class="dto.Factura" fetch="select" name="factura">
+            <column name="factura_id"/>
+        </many-to-one>
+        <many-to-one class="dto.Producto" fetch="select" name="producto">
+            <column name="producto_id"/>
+        </many-to-one>
+        <property name="precio" type="java.lang.Double">
+            <column name="precio"  />
+        </property>
+        <property name="precioIva" type="java.lang.Double">
+            <column name="precio_iva"  />
+        </property>
+        <property name="precioSoloIva" type="java.lang.Double">
+            <column name="precio_solo_iva"  />
+        </property>
+    </class>
+</hibernate-mapping>

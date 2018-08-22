@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 03/08/2018 12:14:52 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="dto.Factura" optimistic-lock="version" schema="public" table="factura">
+        <id name="facturaId" type="int">
+            <column name="factura_id"/>
+            <generator class="increment"/>
+        </id>
+        <many-to-one class="dto.Cliente" fetch="select" name="cliente">
+            <column name="cliente_id"/>
+        </many-to-one>
+        <property name="codigo" type="string">
+            <column length="255" name="codigo"/>
+        </property>
+        <property name="fecha" type="timestamp">
+            <column name="fecha" length="35" />
+        </property>
+        <property name="total" type="java.lang.Double">
+            <column name="total"/>
+        </property>
+    
+    
+        <set fetch="select" inverse="true" lazy="true" name="relFacturaProductos" table="rel_factura_producto">
+            <key>
+                <column name="factura_id"/>
+            </key>
+            <one-to-many class="dto.RelFacturaProducto"/>
+        </set>
+    </class>
+</hibernate-mapping>

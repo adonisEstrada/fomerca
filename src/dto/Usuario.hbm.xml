@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 03/08/2018 12:14:52 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class name="dto.Usuario" optimistic-lock="version" schema="public" table="usuario">
+    <id name="usuarioId" type="int">
+      <column name="usuario_id"/>
+      <generator class="increment"/>
+    </id>
+    <many-to-one class="dto.Perfil" fetch="select" name="perfil">
+      <column name="perfil_id"/>
+    </many-to-one>
+    <property name="name" type="string">
+      <column name="name"/>
+    </property>
+    <property name="pass" type="string">
+      <column name="pass"/>
+    </property>
+    <property name="activo" type="java.lang.Boolean">
+      <column name="activo"/>
+    </property>
+  </class>
+</hibernate-mapping>

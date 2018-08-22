@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 03/08/2018 12:14:52 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class name="dto.Constante" optimistic-lock="version" schema="public" table="constante">
+    <id name="constanteId" type="int">
+      <column name="constante_id"/>
+      <generator class="increment"/>
+    </id>
+    
+    <property name="key" type="string">
+      <column name="key"/>
+    </property>
+    
+    <property name="value" type="string">
+      <column name="value"/>
+    </property>
+    
+    <property name="activo" type="java.lang.Boolean">
+      <column name="activo"/>
+    </property>
+    
+  </class>
+</hibernate-mapping>

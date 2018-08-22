@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 03/08/2018 12:14:52 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class name="dto.Perfil" optimistic-lock="version" schema="public" table="perfil">
+    <id name="perfilId" type="int">
+      <column name="perfil_id"/>
+      <generator class="increment"/>
+    </id>
+    <property name="description" type="string">
+      <column length="127" name="description"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="users" table="user">
+      <key>
+        <column name="perfil_id"/>
+      </key>
+      <one-to-many class="dto.Usuario"/>
+    </set>
+  </class>
+</hibernate-mapping>

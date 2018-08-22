@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 03/08/2018 12:14:52 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="dto.Producto" table="producto" schema="public" optimistic-lock="version">
+        <id name="productoId" type="int">
+            <column name="producto_id" />
+            <generator class="increment" />
+        </id>
+        
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="255" />
+        </property>
+        
+        <property name="codigo" type="string">
+            <column name="codigo" length="255" />
+        </property>
+        
+        <property name="precioBase" type="double">
+            <column name="precio_base" />
+        </property>
+        
+        <property name="precioVenta" type="double">
+            <column name="precio_venta" />
+        </property>
+        <property name="activo" type="java.lang.Boolean">
+            <column name="activo" />
+        </property>
+        <property name="modelo" type="string">
+            <column name="modelo" />
+        </property>
+        <property name="marca" type="string">
+            <column name="marca" />
+        </property>
+        <property name="cantidad" type="java.lang.Integer">
+            <column name="cantidad" />
+        </property>
+        
+        <!--        <set name="users" table="user" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="perfil_id" />
+            </key>
+            <one-to-many class="dto.User" />
+        </set>-->
+        
+    </class>
+</hibernate-mapping>
