@@ -115,6 +115,7 @@ public class VentanaConfiguracionProductos extends javax.swing.JFrame {
         spinnerCantidad = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -289,51 +290,57 @@ public class VentanaConfiguracionProductos extends javax.swing.JFrame {
                 && textFieldCodigoProducto.getText() != null && !textFieldCodigoProducto.getText().equals("")
                 && textFieldPrecioBase.getText() != null && !textFieldPrecioBase.getText().equals("")
                 && textFieldPrecioVenta.getText() != null && !textFieldPrecioVenta.getText().equals("")) {
-            if (producto != null) {
-                if (JOptionPane.showConfirmDialog(null, "Desea EDITAR este producto? \n"
-                        + textFieldNombreProducto.getText()
-                        + "\nPrecio base: " + textFieldPrecioBase.getText() + "$"
-                        + "\nPrecio venta: " + textFieldPrecioVenta.getText() + "$"
-                        + "\nCodigo del producto: " + textFieldCodigoProducto.getText()
-                        + "\nCantidad: " + spinnerCantidad.getValue().toString()) == 0) {
-                    producto.setDescripcion(textFieldNombreProducto.getText());
-                    producto.setPrecioBase(Double.parseDouble(textFieldPrecioBase.getText()));
-                    producto.setPrecioVenta(Double.parseDouble(textFieldPrecioVenta.getText()));
-                    producto.setMarca(textFieldMarca.getText() != null
-                            && !textFieldMarca.getText().equals("")
-                            ? textFieldMarca.getText() : "");
-                    producto.setModelo(textFieldModelo.getText() != null
-                            && !textFieldModelo.getText().equals("")
-                            ? textFieldModelo.getText() : "");
-                    producto.setCantidad((Integer) spinnerCantidad.getValue());
-                    producto.setCodigo(textFieldCodigoProducto.getText());
-                    producto.setActivo(Boolean.TRUE);
-                    userSessionBeanLocal.saveProducto(producto);
-                    recargar();
+            if (Double.parseDouble(textFieldPrecioBase.getText().replace(",", "")) > 0
+                    && Double.parseDouble(textFieldPrecioVenta.getText().replace(",", "")) > 0) {
+                if (producto != null) {
+
+                    if (JOptionPane.showConfirmDialog(null, "Desea EDITAR este producto? \n"
+                            + textFieldNombreProducto.getText()
+                            + "\nPrecio base: " + textFieldPrecioBase.getText() + "$"
+                            + "\nPrecio venta: " + textFieldPrecioVenta.getText() + "$"
+                            + "\nCodigo del producto: " + textFieldCodigoProducto.getText()
+                            + "\nCantidad: " + spinnerCantidad.getValue().toString()) == 0) {
+                        producto.setDescripcion(textFieldNombreProducto.getText());
+                        producto.setPrecioBase(Double.parseDouble(textFieldPrecioBase.getText().replace(",", "")));
+                        producto.setPrecioVenta(Double.parseDouble(textFieldPrecioVenta.getText().replace(",", "")));
+                        producto.setMarca(textFieldMarca.getText() != null
+                                && !textFieldMarca.getText().equals("")
+                                ? textFieldMarca.getText() : "");
+                        producto.setModelo(textFieldModelo.getText() != null
+                                && !textFieldModelo.getText().equals("")
+                                ? textFieldModelo.getText() : "");
+                        producto.setCantidad((Integer) spinnerCantidad.getValue());
+                        producto.setCodigo(textFieldCodigoProducto.getText());
+                        producto.setActivo(Boolean.TRUE);
+                        userSessionBeanLocal.saveProducto(producto);
+                        recargar();
+                    }
+                } else {
+                    if (JOptionPane.showConfirmDialog(null, "Desea guardar este NUEVO producto? \n"
+                            + textFieldNombreProducto.getText()
+                            + "\nPrecio base: " + textFieldPrecioBase.getText() + "$"
+                            + "\nPrecio venta: " + textFieldPrecioVenta.getText() + "$"
+                            + "\nCodigo del producto: " + textFieldCodigoProducto.getText()
+                            + "\nCantidad: " + spinnerCantidad.getValue().toString()) == 0) {
+                        Producto newProducto = new Producto(textFieldNombreProducto.getText(),
+                                Double.parseDouble(textFieldPrecioBase.getText().replace(",", "")),
+                                Double.parseDouble(textFieldPrecioVenta.getText().replace(",", "")),
+                                textFieldCodigoProducto.getText());
+                        newProducto.setActivo(Boolean.TRUE);
+                        newProducto.setMarca(textFieldMarca.getText() != null
+                                && !textFieldMarca.getText().equals("")
+                                ? textFieldMarca.getText() : "");
+                        newProducto.setModelo(textFieldModelo.getText() != null
+                                && !textFieldModelo.getText().equals("")
+                                ? textFieldModelo.getText() : "");
+                        newProducto.setCantidad((Integer) spinnerCantidad.getValue());
+                        newProducto.setCantidad((Integer) spinnerCantidad.getValue());
+                        userSessionBeanLocal.saveProducto(newProducto);
+                        recargar();
+                    }
                 }
             } else {
-                if (JOptionPane.showConfirmDialog(null, "Desea guardar este NUEVO producto? \n"
-                        + textFieldNombreProducto.getText()
-                        + "\nPrecio base: " + textFieldPrecioBase.getText() + "$"
-                        + "\nPrecio venta: " + textFieldPrecioVenta.getText() + "$"
-                        + "\nCodigo del producto: " + textFieldCodigoProducto.getText()
-                        + "\nCantidad: " + spinnerCantidad.getValue().toString()) == 0) {
-                    Producto newProducto = new Producto(textFieldNombreProducto.getText(),
-                            Double.parseDouble(textFieldPrecioBase.getText()),
-                            Double.parseDouble(textFieldPrecioVenta.getText()),
-                            textFieldCodigoProducto.getText());
-                    newProducto.setActivo(Boolean.TRUE);
-                    newProducto.setMarca(textFieldMarca.getText() != null
-                            && !textFieldMarca.getText().equals("")
-                            ? textFieldMarca.getText() : "");
-                    newProducto.setModelo(textFieldModelo.getText() != null
-                            && !textFieldModelo.getText().equals("")
-                            ? textFieldModelo.getText() : "");
-                    newProducto.setCantidad((Integer) spinnerCantidad.getValue());
-                    newProducto.setCantidad((Integer) spinnerCantidad.getValue());
-                    userSessionBeanLocal.saveProducto(newProducto);
-                    recargar();
-                }
+                JOptionPane.showMessageDialog(null, "Precio y costo debe ser mayo o igual a 1.");
             }
         } else {
             JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
@@ -344,6 +351,9 @@ public class VentanaConfiguracionProductos extends javax.swing.JFrame {
         producto = null;
         textFieldCodigoProducto.setText(null);
         textFieldNombreProducto.setText(null);
+        textFieldModelo.setText(null);
+        textFieldMarca.setText(null);
+        spinnerCantidad.setValue(null);
         textFieldPrecioBase.setText(null);
         textFieldPrecioVenta.setText(null);
         buttonAgregar.setText("Agregar");

@@ -46,7 +46,7 @@ Contributor(s):
     <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/fomerca</property>
     <property name="hibernate.connection.username">postgres</property>
     <property name="hibernate.connection.password">123456</property>
-    <property name="show_sql">true</property>
+    <!--<property name="show_sql">true</property>-->
     <mapping resource="dto/Usuario.hbm.xml"/>
     <mapping resource="dto/Cliente.hbm.xml"/>
     <mapping resource="dto/Perfil.hbm.xml"/>

@@ -56,6 +56,7 @@ public class VentanaMenu extends javax.swing.JFrame {
         buttonFacturas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         ButtonRegistry.setBackground(new java.awt.Color(102, 0, 0));
         ButtonRegistry.setForeground(new java.awt.Color(255, 255, 255));
