@@ -63,6 +63,8 @@ public class VentanaConfiguracionCliente extends javax.swing.JFrame {
         label.setSize(this.getSize());
         this.add(label);
 
+        textFieldFechaNacimiento.setToolTipText("Formato: dia-mes-año(completo), ejemplo: 08-05-1995");
+
         String[] stringClientes = userSessionBeanLocal.listaLabelsClientes(null);
 
         listaClientes.setListData(stringClientes);
@@ -104,6 +106,7 @@ public class VentanaConfiguracionCliente extends javax.swing.JFrame {
         buttonLimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -125,12 +128,12 @@ public class VentanaConfiguracionCliente extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Dirección:");
 
-        textFieldFechaNacimiento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
+        textFieldFechaNacimiento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yyyy"))));
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Fecha nacimiento:");
 
-        textFieldCedula.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        textFieldCedula.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
 
         listaClientes.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -278,48 +281,52 @@ public class VentanaConfiguracionCliente extends javax.swing.JFrame {
         if (textFieldNombre.getText() != null && !textFieldNombre.getText().equals("")
                 && textFieldApellido.getText() != null && !textFieldApellido.getText().equals("")
                 && textFieldCedula.getText() != null && !textFieldCedula.getText().equals("")) {
-            if (userSessionBeanLocal.getClienteByCedula(Integer.parseInt(textFieldCedula.getText().replace(".", ""))) == null) {
-                if (cliente != null) {
-                    if (JOptionPane.showConfirmDialog(null, "Desea EDITAR este cliente? \n"
-                            + textFieldNombre.getText() + " " + textFieldApellido.getText()
-                            + "\nCédula: " + textFieldCedula.getText() + " ") == 0) {
-                        try {
-                            cliente.setNombre(textFieldNombre.getText());
-                            cliente.setApellido(textFieldApellido.getText());
-                            cliente.setCedula(Integer.parseInt(textFieldCedula.getText().replace(".", "")));
-                            cliente.setActivo(Boolean.TRUE);
-                            cliente.setDireccion(textAreaDireccion.getText());
-                            if (textFieldFechaNacimiento.getText() != null && !textFieldFechaNacimiento.getText().equals("")) {
-                                cliente.setFechaNacimiento(new SimpleDateFormat("dd/MM/yyyy").parse(textFieldFechaNacimiento.getText()));
+            if (userSessionBeanLocal.getClienteByCedula(Integer.parseInt(textFieldCedula.getText())) == null) {
+                if (Integer.parseInt(textFieldCedula.getText()) > 0) {
+                    if (cliente != null) {
+                        if (JOptionPane.showConfirmDialog(null, "Desea EDITAR este cliente? \n"
+                                + textFieldNombre.getText() + " " + textFieldApellido.getText()
+                                + "\nCédula: " + textFieldCedula.getText() + " ") == 0) {
+                            try {
+                                cliente.setNombre(textFieldNombre.getText());
+                                cliente.setApellido(textFieldApellido.getText());
+                                cliente.setCedula(Integer.parseInt(textFieldCedula.getText()));
+                                cliente.setActivo(Boolean.TRUE);
+                                cliente.setDireccion(textAreaDireccion.getText());
+                                if (textFieldFechaNacimiento.getText() != null && !textFieldFechaNacimiento.getText().equals("")) {
+                                    cliente.setFechaNacimiento(new SimpleDateFormat("dd-MM-yyyy").parse(textFieldFechaNacimiento.getText()));
+                                }
+                                userSessionBeanLocal.saveCliente(cliente);
+                                recargar();
+                            } catch (ParseException ex) {
+                                Logger.getLogger(VentanaConfiguracionCliente.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            userSessionBeanLocal.saveCliente(cliente);
-                            recargar();
-                        } catch (ParseException ex) {
-                            Logger.getLogger(VentanaConfiguracionCliente.class.getName()).log(Level.SEVERE, null, ex);
+
+                        }
+                    } else {
+                        if (JOptionPane.showConfirmDialog(null, "Desea guardar este NUEVO cliente? \n"
+                                + textFieldNombre.getText() + " " + textFieldApellido.getText() + " "
+                                + "\nCédula: " + textFieldCedula.getText() + "") == 0) {
+                            try {
+                                Cliente newCliente = new Cliente();
+                                newCliente.setNombre(textFieldNombre.getText());
+                                newCliente.setActivo(Boolean.TRUE);
+                                newCliente.setApellido(textFieldApellido.getText());
+                                newCliente.setCedula(Integer.parseInt(textFieldCedula.getText()));
+                                newCliente.setDireccion(textAreaDireccion.getText());
+                                if (textFieldFechaNacimiento.getText() != null && !textFieldFechaNacimiento.getText().equals("")) {
+                                    newCliente.setFechaNacimiento(new SimpleDateFormat("dd-MM-yyyy").parse(textFieldFechaNacimiento.getText()));
+                                }
+                                userSessionBeanLocal.saveCliente(newCliente);
+                                recargar();
+                            } catch (ParseException ex) {
+                                Logger.getLogger(VentanaConfiguracionCliente.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
 
                     }
-                } else {
-                    if (JOptionPane.showConfirmDialog(null, "Desea guardar este NUEVO cliente? \n"
-                            + textFieldNombre.getText() + " " + textFieldApellido.getText() + " "
-                            + "\nCédula: " + textFieldCedula.getText() + "") == 0) {
-                        try {
-                            Cliente newCliente = new Cliente();
-                            newCliente.setNombre(textFieldNombre.getText());
-                            newCliente.setActivo(Boolean.TRUE);
-                            newCliente.setApellido(textFieldApellido.getText());
-                            newCliente.setCedula(Integer.parseInt(textFieldCedula.getText().replace(".", "")));
-                            newCliente.setDireccion(textAreaDireccion.getText());
-                            if (textFieldFechaNacimiento.getText() != null && !textFieldFechaNacimiento.getText().equals("")) {
-                                newCliente.setFechaNacimiento(new SimpleDateFormat("dd/MM/yyyy").parse(textFieldFechaNacimiento.getText()));
-                            }
-                            userSessionBeanLocal.saveCliente(newCliente);
-                            recargar();
-                        } catch (ParseException ex) {
-                            Logger.getLogger(VentanaConfiguracionCliente.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-
+                }else{
+                    JOptionPane.showMessageDialog(null, "Cedula debe ser mayor a 1");
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "El cliente ya existe.");
@@ -336,7 +343,7 @@ public class VentanaConfiguracionCliente extends javax.swing.JFrame {
             textFieldApellido.setText(cliente.getApellido());
             textFieldCedula.setText(cliente.getCedula().toString());
             if (cliente.getFechaNacimiento() != null) {
-                textFieldFechaNacimiento.setText(new SimpleDateFormat("dd/MM/yyyy").format(cliente.getFechaNacimiento()));
+                textFieldFechaNacimiento.setText(new SimpleDateFormat("dd-MM-yyyy").format(cliente.getFechaNacimiento()));
             }
         } else {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un cliente.");
